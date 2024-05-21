@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import { get, onValue, ref } from 'firebase/database';
+import { onValue, ref } from 'firebase/database';
 import { database } from "../../firebaseConfig";
 import { Line } from "react-chartjs-2";
 import { 
@@ -21,7 +21,8 @@ Chartjs.register(CategoryScale, LinearScale, PointElement, LineElement, Title, T
 export default function PatientDetail() {
     const { id } = useParams();
     const [patient, setPatient] = useState(null);
-    const [infusionData, setInfusionData] = useState([]);
+    const [ dripRateArr, setDripRateArr] = useState([]);
+    const [ timeArr, setTimeArr ] = useState([]);
 
     useEffect(() => {
         if (id) {
@@ -29,7 +30,21 @@ export default function PatientDetail() {
 
             const unsubscribe = onValue(patientRef, (snapshot) => {
                 if (snapshot.exists()) {
-                    setPatient(snapshot.val());
+                    const data = snapshot.val();
+                    setPatient(data);
+
+                    setDripRateArr(prevDripRateArr => [...prevDripRateArr, data.drip_rate]);
+                    
+                    const elapsedTime = new Date(data.time);
+                    const hours = String(elapsedTime.getUTCHours()).padStart(2, '0');
+                    const minutes = String(elapsedTime.getUTCMinutes()).padStart(2, '0');
+                    const seconds = String(elapsedTime.getUTCSeconds()).padStart(2, '0');
+                    const formattedTime = `${hours}:${minutes}:${seconds}`;
+
+                    setTimeArr(prevTimerArr => [...prevTimerArr, formattedTime]);
+
+                    console.log(data);
+
                 } else {
                     console.error('Pasien tidak ditemukan');
                 }
@@ -46,30 +61,42 @@ export default function PatientDetail() {
         return <div>LOADING...</div>
     }
 
-    const labels = infusionData.map(entry => entry.time);
-    const data = {
-        labels,
+    const dataChart = {
+        labels: timeArr,
         datasets: [
             {
-                label: 'Kecepatan Infus (TPM)',
-                data: infusionData.map(entry => entry.drip_rate),
+                label: 'Kecepatan Infus',
+                data: dripRateArr,
                 fill: false,
-                borderColor: 'rgb(75, 192, 192)',
-                tension: 0.1
+                backgroundColor: 'rgb(75, 192, 192)',
+                borderColor: 'rgba(75, 192, 192, 0.2)',
             }
-        ]
-    }
+        ],
+    };
+
+    const options = {
+        responsive: true,
+        plugins: {
+          legend: {
+            position: 'top',
+          },
+          title: {
+            display: true,
+            text: 'Kecepatan Infus',
+          },
+        },
+    };
 
     return (
         <div className="container">
             <h1>Detail Pasien</h1>
             <p>Nama: {patient.nama}</p>
             <p>Nomor Kamar: {patient.nomor_kamar}</p>
-            <p>kecepatan infus (TPM): {patient.drip_rate.toFixed(2)}</p>
+            <p>kecepatan infus (TPM): {patient.drip_rate}</p>
             <p>Cairan infus: {patient.infusion_weight}</p>
 
             <div className="chart-container">
-                <Line data={data}/>
+                <Line data={dataChart} options={options}/>
             </div>
         </div>
     )
