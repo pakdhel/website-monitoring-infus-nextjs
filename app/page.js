@@ -74,7 +74,7 @@ export default function Home() {
                 </td>
                 <td className="px-6 py-4">
                   <button>
-                    {patient.infusion_weight.toFixed(2)}
+                    {patient.infusion_weight}
                   </button>
                 </td>
               </tr>

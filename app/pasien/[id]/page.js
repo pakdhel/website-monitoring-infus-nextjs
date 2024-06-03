@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { onValue, ref } from 'firebase/database';
 import { database } from "../../firebaseConfig";
 import { Line } from "react-chartjs-2";
@@ -15,6 +15,7 @@ import {
     Tooltip, 
     Legend 
 } from "chart.js";
+import { Router } from "next/router";
 
 Chartjs.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
@@ -23,6 +24,7 @@ export default function PatientDetail() {
     const [patient, setPatient] = useState(null);
     const [ dripRateArr, setDripRateArr] = useState([]);
     const [ timeArr, setTimeArr ] = useState([]);
+    const router = useRouter();
 
     useEffect(() => {
         if (id) {
@@ -114,13 +116,14 @@ export default function PatientDetail() {
                             </div>
                             <div class="flex-[30%] text-center p-[5px] text-[rgba(170,222,243,0.721)]">
                                 <span class="block text-[12px]">Cairan Infus</span>
-                                <span class="text-[12px]">{patient.infusion_weight.toFixed(2)}</span>
+                                <span class="text-[12px]">{patient.infusion_weight}</span>
                             </div>
                         </div>
                     </div>
                     <div className="flex justify-center items-center font-semibold text-white text-[15px] p-3">
                         <button 
                         className="bg-[#bababa] p-2 w-[100%] rounded-md"
+                        onClick={() => router.push(`/pasien/${id}/edit`)}
                         >
                             Edit
                         </button>
