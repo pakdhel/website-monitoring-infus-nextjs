@@ -52,25 +52,30 @@ export default function Home() {
             {patients.map(patient => (
               <tr key={patient.id} 
                 className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"  
+                onClick={() => handleRowClick(patient.id)}
               > 
                 <button>
                   <th 
                     scope="row" 
-                    className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                    onClick={() => handleRowClick(patient.id)}
+                    className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"  
                   >
                     {patient.nama}
                   </th>
                 </button>           
-                
                 <td className="px-6 py-4">
-                  {patient.nomor_kamar}
+                  <button>
+                    {patient.nomor_kamar}
+                  </button>
                 </td>
                 <td className="px-6 py-4">
-                  {patient.drip_rate.toFixed(2)}
+                  <button>
+                    {patient.drip_rate.toFixed(2)}
+                  </button>
                 </td>
                 <td className="px-6 py-4">
-                  {patient.infusion_weight}
+                  <button>
+                    {patient.infusion_weight.toFixed(2)}
+                  </button>
                 </td>
               </tr>
             ))}
