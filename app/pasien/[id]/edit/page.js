@@ -44,12 +44,15 @@ export default function EditPasien() {
     const handleSubmit = (e) => {
         e.preventDefault();
         const patientRef = ref(database, `pasien/${id}`);
-        update(patientRef, form).then(() => {
-            alert('Data berhasil diperbarui');
+        update(patientRef, {
+            ...form,
+            initial_infusion_weight: parseFloat(form.infusion_weight)
+        }).then(() => {
+            alert("Data berhasil diperbarui");
             router.push(`/pasien/${id}`);
         }).catch(error => {
-            console.error("Error update: ", error)
-        })
+            console.error("error update: ", error);
+        });
     }
 
     if (!patient) {
@@ -57,7 +60,7 @@ export default function EditPasien() {
     }
 
     return (
-        <div className="container mx-auto p-4">
+        <div className="container mx-auto w-[50%] mt-3">
           <h1 className="text-2xl font-bold mb-4">Edit Data Pasien</h1>
           <form onSubmit={handleSubmit}>
             <div className="mb-4">
@@ -83,7 +86,7 @@ export default function EditPasien() {
             <div className="mb-4">
               <label className="block text-gray-700 text-sm font-bold mb-2">Kecepatan Infus (TPM)</label>
               <input 
-                type="number" 
+                type="number"
                 name="drip_rate"
                 value={form.drip_rate} 
                 onChange={handleChange} 
@@ -95,7 +98,7 @@ export default function EditPasien() {
               <input 
                 type="number" 
                 name="infusion_weight"
-                value={form.infusion_weight} 
+                value={form.infusion_weight}
                 onChange={handleChange} 
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               />

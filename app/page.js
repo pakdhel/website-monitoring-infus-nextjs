@@ -69,12 +69,12 @@ export default function Home() {
                 </td>
                 <td className="px-6 py-4">
                   <button>
-                    {patient.drip_rate.toFixed(2)}
+                    {parseFloat(patient.drip_rate).toFixed(2)}
                   </button>
                 </td>
                 <td className="px-6 py-4">
                   <button>
-                    {patient.infusion_weight}
+                    {parseFloat(patient.infusion_weight).toFixed(2)}
                   </button>
                 </td>
               </tr>

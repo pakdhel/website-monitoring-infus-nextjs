@@ -15,7 +15,6 @@ import {
     Tooltip, 
     Legend 
 } from "chart.js";
-import { Router } from "next/router";
 
 Chartjs.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
@@ -112,17 +111,17 @@ export default function PatientDetail() {
                             </div>
                             <div class="flex-[30%] text-center p-[5px] text-[rgba(170,222,243,0.721)] border-l border-r border-[rgba(255,255,255,0.126)]">
                                 <span class="block text-[12px]">Kecepatan Infus (TPM) </span>
-                                <span class="text-[12px]">{patient.drip_rate.toFixed(2)}</span>
+                                <span class="text-[12px]">{parseFloat(patient.drip_rate).toFixed(2)}</span>
                             </div>
                             <div class="flex-[30%] text-center p-[5px] text-[rgba(170,222,243,0.721)]">
                                 <span class="block text-[12px]">Cairan Infus</span>
-                                <span class="text-[12px]">{patient.infusion_weight}</span>
+                                <span class="text-[12px]">{parseFloat(patient.infusion_weight).toFixed(2)}</span>
                             </div>
                         </div>
                     </div>
-                    <div className="flex justify-center items-center font-semibold text-white text-[15px] p-3">
+                    <div className="flex justify-center items-center font-semibold text-[#ffffff] text-[15px] p-3">
                         <button 
-                        className="bg-[#bababa] p-2 w-[100%] rounded-md"
+                        className="bg-[#009dff] p-2 w-[100%] rounded-md"
                         onClick={() => router.push(`/pasien/${id}/edit`)}
                         >
                             Edit
